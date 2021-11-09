@@ -51,8 +51,15 @@ public class ArtistController {
 
     }
 
+    @PutMapping (path = "/{artistId}")
+    public Artist editandoArtista(@Validated @RequestBody Artistrequest request, @PathVariable("idArtist") Long idArtist){
+        return artistService.editArtist(request, idArtist);
+    }
 
-
+    @DeleteMapping (path = "/{artistId}")
+    public Artist eliminandoArtista(@PathVariable ("idArtis") Long idArtist){
+        return artistService.eliminarArtist(idArtist);
+    }
 
 }
 
