@@ -5,6 +5,7 @@ import com.spotify.spotify.controller.Artist.Artistrequest;
 import com.spotify.spotify.domain.Artist;
 import com.spotify.spotify.domain.mapper.ArtistMapper;
 import com.spotify.spotify.exceptions.ArtistExistsException;
+import com.spotify.spotify.exceptions.ArtistNotExistException;
 import io.micrometer.core.instrument.Tags;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -64,6 +65,24 @@ public class ArtistService implements IArtistService {
             log.error("Artista ya existente");
             throw new ArtistExistsException("Artista existente");
         }
+
+        return artist;
+    }
+
+    @Override
+    public Artist editArtist(Artistrequest request, Long idArtist) {
+          Artist artist = null;
+          if (artistaMap.get(idArtist) !=null){
+              artist= artistMapper.apply(request);
+              artistaMap.remove(request.getIdArtist());
+              artistaMap.put(request.getIdArtist(),artist);
+          } else {
+              Logger log = null;
+              log.error("El artista no exite");
+              throw new ArtistNotExistException("El artista no existe");
+          }
+
+
 
         return artist;
     }

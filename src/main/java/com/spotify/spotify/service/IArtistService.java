@@ -9,7 +9,7 @@ public interface IArtistService {
 
     Artist getArtist(Long idArtist);
 
-    List<Artist> getArtist();
+    List<Artist> getArtists();
 
     Artist createArtist(Artistrequest request);
 

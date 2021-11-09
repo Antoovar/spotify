@@ -1,8 +1,10 @@
 package com.spotify.spotify.controller;
 
+import com.spotify.spotify.controller.Artist.Artistrequest;
 import com.spotify.spotify.domain.Artist;
 import com.spotify.spotify.service.ArtistService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,19 +17,15 @@ public class ArtistController {
    private ArtistService artistService;
 
 
+    @GetMapping(path ="/")
+    public String retriveArtist(){
 
+        return "Pagina Principal";
+    }
 
-
-
-    /*@GetMapping(path ="/")
-    public Artist retriveArtist(){
-
-        return artistService.getArtist();
-    }*/
-
-
-    @GetMapping(path ="/{id}")
-    public Artist getarticulo(@PathVariable("id")Long id){
+//busco por id
+    @GetMapping(path ="/{idArtist}")
+    public Artist getarticuloid(@PathVariable("idArtist")Long id){
 
         return artistService.getArtist(id);
     }
@@ -40,11 +38,19 @@ public class ArtistController {
     }
     */
 
+   //me devuelve lista de artistas
 
-    @GetMapping()
+    @GetMapping(path = "/artists/")
     public List<Artist> retriveArtists(){
         return artistService.getArtists();
     }
+
+    @PostMapping(path = "/artist")
+    public Artist creandoArtista(@Validated @RequestBody Artistrequest request){
+        return artistService.createArtist(request);
+
+    }
+
 
 
 
