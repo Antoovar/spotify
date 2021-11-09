@@ -1,30 +1,73 @@
 package com.spotify.spotify.service;
 
+import ch.qos.logback.classic.Logger;
+import com.spotify.spotify.controller.Artist.Artistrequest;
 import com.spotify.spotify.domain.Artist;
+import com.spotify.spotify.domain.mapper.ArtistMapper;
+import com.spotify.spotify.exceptions.ArtistExistsException;
+import io.micrometer.core.instrument.Tags;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
-import java.util.List;
+import javax.annotation.PostConstruct;
+import java.util.*;
 
 @Service
-public class ArtistService {
+public class ArtistService implements IArtistService {
+
+
+    @Autowired
+    private ArtistMapper artistMapper;
 
     @Qualifier("Artistas")
     @Autowired
     private List<Artist> Artistas;
 
-  // con esto me devuelve uno solo
-    public Artist getArtist(Long id ){
-        return Artist.builder().idArtist(1L).name("Arjona").genre("Romantico").image("xxx").build();
+
+    @PostConstruct
+    public void init() {
+        artistaMap = new HashMap<>();
+        Artistas.stream().forEach(artista -> {
+            artistaMap.put(artista.getIdArtist(), artista);
+        });
     }
-    //hago una lista para que me devuelva mas datos
-     public List<Artist> getArtists(){
-             return Arrays.asList(Artist.builder().idArtist(2L).name("LucianoPereyra").genre("Balada").image("xxx").build(),Artist.builder().idArtist(2L).name("Soledad").genre("Folklore").image("xxx").build());
 
-         }
+    private Map<Long, Artist> artistaMap;
 
 
+    //me devuelve artista
+    public Artist getArtist(Long idArtist) {
+        return artistaMap.get(idArtist);
+    }
 
+    //lista de artistas
+
+    public List<Artist> getArtists() {
+        return new ArrayList<>(artistaMap.values());
+    }
+
+    //Elimino artista
+    public Artist eliminarArtist(Long IdArtist) {
+        return artistaMap.remove(IdArtist);
+    }
+
+    //Creo Artista
+
+    public Artist createArtist(Artistrequest request) {
+        Artist artist = artistMapper.apply(request);
+        if (artistaMap.get(request.getIdArtist()) == null) {
+            artistaMap.put(request.getIdArtist(), artistMapper.apply(request));
+        } else {
+
+            Logger log = null;
+            log.error("Artista ya existente");
+            throw new ArtistExistsException("Artista existente");
+        }
+
+        return artist;
+    }
 }
+
+
+

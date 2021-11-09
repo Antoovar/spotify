@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Map;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -17,5 +19,6 @@ public class Artist {
     private String name;
     private String genre;
     private String image;
+
 
 }
