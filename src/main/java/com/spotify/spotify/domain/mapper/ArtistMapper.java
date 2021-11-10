@@ -1,6 +1,6 @@
 package com.spotify.spotify.domain.mapper;
 
-import com.spotify.spotify.controller.Artist.Artistrequest;
+import com.spotify.spotify.controller.request.Artistrequest;
 import com.spotify.spotify.domain.Artist;
 import org.springframework.stereotype.Component;
 

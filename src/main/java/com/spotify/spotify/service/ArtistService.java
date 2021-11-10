@@ -1,12 +1,11 @@
 package com.spotify.spotify.service;
 
 import ch.qos.logback.classic.Logger;
-import com.spotify.spotify.controller.Artist.Artistrequest;
+import com.spotify.spotify.controller.request.Artistrequest;
 import com.spotify.spotify.domain.Artist;
 import com.spotify.spotify.domain.mapper.ArtistMapper;
 import com.spotify.spotify.exceptions.ArtistExistsException;
 import com.spotify.spotify.exceptions.ArtistNotExistException;
-import io.micrometer.core.instrument.Tags;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -24,6 +23,8 @@ public class ArtistService implements IArtistService {
     @Qualifier("Artistas")
     @Autowired
     private List<Artist> Artistas;
+
+
 
 
     @PostConstruct
