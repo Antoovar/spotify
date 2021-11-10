@@ -10,7 +10,7 @@ import javax.validation.constraints.NotNull;
 @Data
 
 public class Albumrequest {
-     @NotNull
+     @NotNull ( message= "El id no puede ser null ")
     private Long idAlbum;
     private Long idArtist;
     private String name;
