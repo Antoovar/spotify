@@ -1,9 +1,7 @@
 package com.spotify.spotify.controller;
 
 import com.spotify.spotify.controller.request.Albumrequest;
-import com.spotify.spotify.controller.request.Artistrequest;
 import com.spotify.spotify.domain.Album;
-import com.spotify.spotify.domain.Artist;
 import com.spotify.spotify.service.AlbumService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
