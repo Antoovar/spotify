@@ -24,17 +24,15 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class TrackService implements ItrackService{
+public class TrackService implements ItrackService {
 
     @Autowired
-   private TrackMapper trackMapper;
+    private TrackMapper trackMapper;
 
 
     @Qualifier("tracks")
     @Autowired
     private List<Track> Tracks;
-
-
 
 
     @PostConstruct
@@ -46,8 +44,6 @@ public class TrackService implements ItrackService{
     }
 
     private Map<Long, Track> trackmap;
-
-
 
 
     public Track getTrack(Long id) {
@@ -82,10 +78,10 @@ public class TrackService implements ItrackService{
     @Override
     public Track editTrack(Trackrequest request, Long id) {
         Track track = null;
-        if (trackmap.get(id) !=null){
-            track= trackMapper.apply(request);
+        if (trackmap.get(id) != null) {
+            track = trackMapper.apply(request);
             trackmap.remove(request.getId());
-            trackmap.put(request.getId(),track);
+            trackmap.put(request.getId(), track);
         } else {
             Logger log = null;
             log.error("El artista no exite");
@@ -93,10 +89,17 @@ public class TrackService implements ItrackService{
         }
 
 
-
         return track;
     }
 
+
+    public Track incrementarTrack(Long id) {
+        Track track = trackmap.get(id);
+        track.setReproduction(track.getReproduction() + 1);
+        trackmap.put(id, track);
+
+        return track;
+    }
 
 
 }

@@ -50,6 +50,8 @@ public class TrackController {
         return trackService.deleteTrack(id);
     }
 
-
-
+     @GetMapping(path = "/spotify/play/track/{trackId}")
+     public Track incrementarCancion(@PathVariable("id") Long id){
+        return trackService.incrementarTrack(id);
+     }
 }

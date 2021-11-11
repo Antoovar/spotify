@@ -21,4 +21,6 @@ public interface ItrackService {
 
     Track deleteTrack(Long id);
 
+    Track incrementarTrack(Long id);
+
 }
