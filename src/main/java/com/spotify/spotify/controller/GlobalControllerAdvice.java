@@ -20,7 +20,7 @@ public class GlobalControllerAdvice {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public Map<String,String> handlerValidationException(MethodArgumentNotValidException ex){
+    public Map<String, String> handlerValidationException(MethodArgumentNotValidException ex) {
         Map<String, String> errors = new HashMap<>();
         ex.getBindingResult().getAllErrors().forEach((error) -> {
             String fieldName = ((FieldError) error).getField();
@@ -29,5 +29,7 @@ public class GlobalControllerAdvice {
         });
         return errors;
 
+
+    }
 
 }

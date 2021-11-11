@@ -39,7 +39,6 @@ public class AlbumController {
 
     }
 
-
     @PutMapping (path = "/{albumId}")
     public Album editandoAlbum(@Validated @RequestBody Albumrequest request, @PathVariable("idAlbum") Long idAlbum){
         return albumService.editAlbum(request, idAlbum);
@@ -49,5 +48,4 @@ public class AlbumController {
     public Album eliminandoAlbum(@PathVariable ("idAlbum") Long idAlbum){
         return albumService.deleteAlbum(idAlbum);
     }
-
 }
