@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.Map;
 
 
-
 @Slf4j
 @Service
 public class AlbumService implements IAlbumService {
@@ -36,57 +35,57 @@ public class AlbumService implements IAlbumService {
     private List<Album> Albums;
 
     @PostConstruct
-    public void init(){
+    public void init() {
 
         Albums.stream().forEach(album -> {
             albumRepository.save(album);
         });
     }
+
     @Autowired
     private AlbumRepository albumRepository;
 
 
     private Map<Long, Album> albumap;
 
-    public Album getAlbum(Long idAlbum){
+    public Album getAlbum(Long idAlbum) {
         return albumRepository.findById(idAlbum).get();
     }
 
-    public Album deleteAlbum(Long idAlbum){
+    public Album deleteAlbum(Long idAlbum) {
         albumRepository.deleteById(idAlbum);
         return null;
     }
 
-    public Iterable<Album> getAlbums(){
+    public Iterable<Album> getAlbums() {
         return albumRepository.findAll();
     }
 
 
     public Album createAlbum(Albumrequest request) {
         Album album = albumMapper.apply(request);
-        if (request.getIdAlbum()!= null && albumRepository.findById(request.getIdAlbum()) !=null) {
+        if (request.getIdAlbum() != null && albumRepository.findById(request.getIdAlbum()) != null) {
 
         } else {
-             log.error("El album ya existe");
+            log.error("El album ya existe");
             throw new AlbumExistsException("Album existente");
         }
 
         return album;
     }
-    
+
 
     @Override
     public Album editAlbum(Albumrequest request, Long idAlbum) {
 
         Album album;
-        if (albumRepository.findById(idAlbum)!= null) {
+        if (albumRepository.findById(idAlbum) != null) {
             album = albumMapper.apply(request);
             albumRepository.save(album);
         } else {
             log.error("El album ya existe");
             throw new AlbumNotExistException("El Album no existe");
         }
-
 
 
         return album;

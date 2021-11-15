@@ -1,8 +1,6 @@
 package com.spotify.spotify.service;
 
 
-
-
 import ch.qos.logback.classic.Logger;
 
 
@@ -40,7 +38,6 @@ public class TrackService implements ItrackService {
     private List<Track> Tracks;
 
 
-
     @Autowired
     private TrackRepository trackRepository;
 
@@ -75,7 +72,7 @@ public class TrackService implements ItrackService {
         Track track = trackMapper.apply(request);
         if (request.getId() != null && trackRepository.findById(request.getIdArtist()) != null) {
             log.error("El Track NO existe");
-        }else {
+        } else {
             trackRepository.save(trackMapper.apply(request));
 
         }
@@ -86,7 +83,7 @@ public class TrackService implements ItrackService {
     @Override
     public Track editTrack(Trackrequest request, Long id) {
         Track track = null;
-        if (trackRepository.findById(id)!= null) {
+        if (trackRepository.findById(id) != null) {
             track = trackMapper.apply(request);
             trackRepository.save(track);
         } else {

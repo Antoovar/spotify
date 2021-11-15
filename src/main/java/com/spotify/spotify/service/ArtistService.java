@@ -65,11 +65,11 @@ public class ArtistService implements IArtistService {
 
     public Artist createArtist(Artistrequest request) {
         Artist artist = artistMapper.apply(request);
-        if (request.getIdArtist() != null && artistRepository.findById(request.getIdArtist()) != null){
+        if (request.getIdArtist() != null && artistRepository.findById(request.getIdArtist()) != null) {
             log.error("El artista ya exite");
             throw new ArtistExistsException("Artista existente");
         } else {
-               artistRepository.save(artistMapper.apply(request));
+            artistRepository.save(artistMapper.apply(request));
         }
 
 
@@ -79,7 +79,7 @@ public class ArtistService implements IArtistService {
     @Override
     public Artist editArtist(Artistrequest request, Long idArtist) {
         Artist artist = null;
-        if (artistRepository.findById(idArtist)!= null) {
+        if (artistRepository.findById(idArtist) != null) {
             artist = artistMapper.apply(request);
             artistRepository.save(artist);
         } else {

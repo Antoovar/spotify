@@ -1,9 +1,6 @@
 package com.spotify.spotify.controller;
 
 
-
-
-
 import com.spotify.spotify.controller.request.Trackrequest;
 import com.spotify.spotify.domain.Track;
 import com.spotify.spotify.service.TrackService;
@@ -22,36 +19,35 @@ public class TrackController {
     private TrackService trackService;
 
 
-
-    @GetMapping (path ="/{id}")
-    public Track getTrackid(@PathVariable("id")Long id){
+    @GetMapping(path = "/{id}")
+    public Track getTrackid(@PathVariable("id") Long id) {
 
         return trackService.getTrack(id);
     }
 
     @GetMapping(path = "/tracks/")
-    public Iterable<Track> retriveTracks(){
+    public Iterable<Track> retriveTracks() {
         return trackService.getTracks();
     }
 
     @PostMapping(path = "/crearTrack")
-    public Track creandoTrack( @RequestBody Trackrequest request){
+    public Track creandoTrack(@RequestBody Trackrequest request) {
         return trackService.createTrack(request);
 
     }
 
-    @PutMapping (path = "/{trackId}")
-    public Track editandoTrack( @RequestBody Trackrequest request, @PathVariable("id") Long id){
+    @PutMapping(path = "/{trackId}")
+    public Track editandoTrack(@RequestBody Trackrequest request, @PathVariable("id") Long id) {
         return trackService.editTrack(request, id);
     }
 
-    @DeleteMapping (path = "/{tracksId}")
-    public Track eliminandoTracks(@PathVariable ("id") Long id){
+    @DeleteMapping(path = "/{tracksId}")
+    public Track eliminandoTracks(@PathVariable("id") Long id) {
         return trackService.deleteTrack(id);
     }
 
-     @GetMapping(path = "/spotify/play/track/{trackId}")
-     public Track incrementarCancion(@PathVariable("id") Long id){
+    @GetMapping(path = "/spotify/play/track/{trackId}")
+    public Track incrementarCancion(@PathVariable("id") Long id) {
         return trackService.incrementarTrack(id);
-     }
+    }
 }
