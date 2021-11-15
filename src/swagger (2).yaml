@@ -1,0 +1,121 @@
+swagger: "2.0"
+info:
+  description: "spotify-service"
+  version: "1.0.0"
+  title: "Spotify"
+  contact:
+    email: "apiteam@swagger.io"
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+host: "petstore.swagger.io"
+basePath: "/v2"
+tags:
+- name: "track"
+  description: "Operaciones sobre track"
+schemes:
+- "https"
+- "http"
+paths:
+  /artist:
+    post:
+      tags:
+      - "Album"
+      summary: "crea un nuevo album"
+      description: "crea un nuevo album"
+      operationId: "nuevoAlbum"
+      parameters:
+      - in: "body"
+        name: "AlbumRequest"
+        description: "objeto album"
+        required: true
+        schema:
+          $ref: "#/definitions/AlbumRequest"
+      responses:
+        "200":
+          description: "Created"
+          schema:
+            $ref: "#/definitions/AlbumResponse"
+        "400":
+          description: "Bad Request"
+          schema:
+            $ref: "#/definitions/ErrorBadRequestResponse"
+        "404":
+          description: "Not Found"
+          schema:
+            $ref: "#/definitions/ErrorNotFoundResponse"
+        "500":
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/ErrorInternalServerResponse"
+            
+definitions:
+  AlbumRequest:
+    type: "object"
+    required:
+    - "name"
+    - "idArtist"
+    - "idAlbum"
+    properties:
+      name:
+        type: "string"
+        
+      idArtist:
+        type: "number"
+        
+      idAlbum:
+        type: "number"
+        
+
+     
+        
+  AlbumResponse:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+        
+      idArtist:
+        type: "number"
+        
+      idAlbum:
+        type: "number"
+        
+        
+   
+  ErrorNotFoundResponse:
+    type: "object"
+    properties:
+      code:
+        type: "string"
+        example: "GENERIC_NOT_FOUND"
+      message:
+        type: "string"
+        example: "Resource Not Found"
+      result:
+        type: "string"
+        example: "GENERIC_NOT_FOUND"
+  ErrorBadRequestResponse:
+    type: "object"
+    properties:
+      code:
+        type: "string"
+        example: "GENERIC_BAD_REQUEST"
+      message:
+        type: "string"
+        example: "Invalid Request"
+      result:
+        type: "string"
+        example: "GENERIC_NOT_FOUND"
+  ErrorInternalServerResponse:
+    type: "object"
+    properties:
+      code:
+        type: "string"
+        example: "GENERIC_INTERNAL_SERVER_ERROR"
+      message:
+        type: "string"
+        example: "Internal Server Error"
+      result:
+        type: "string"
+        example: "GENERIC_INTERNAL_SERVER_ERROR"
