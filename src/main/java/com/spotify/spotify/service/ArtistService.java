@@ -6,6 +6,8 @@ import com.spotify.spotify.domain.Artist;
 import com.spotify.spotify.domain.mapper.ArtistMapper;
 import com.spotify.spotify.exceptions.ArtistExistsException;
 import com.spotify.spotify.exceptions.ArtistNotExistException;
+import com.spotify.spotify.repository.ArtistRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -13,6 +15,8 @@ import org.springframework.stereotype.Service;
 import javax.annotation.PostConstruct;
 import java.util.*;
 
+
+@Slf4j
 @Service
 public class ArtistService implements IArtistService {
 
@@ -24,14 +28,15 @@ public class ArtistService implements IArtistService {
     @Autowired
     private List<Artist> Artistas;
 
-
+    @Autowired
+    private ArtistRepository artistRepository;
 
 
     @PostConstruct
     public void init() {
-        artistaMap = new HashMap<>();
+
         Artistas.stream().forEach(artista -> {
-            artistaMap.put(artista.getIdArtist(), artista);
+            artistRepository.save(artista);
         });
     }
 
@@ -40,49 +45,47 @@ public class ArtistService implements IArtistService {
 
     //me devuelve artista
     public Artist getArtist(Long idArtist) {
-        return artistaMap.get(idArtist);
+        return artistRepository.findById(idArtist).get();
     }
+
 
     //lista de artistas
 
-    public List<Artist> getArtists() {
-        return new ArrayList<>(artistaMap.values());
+    public Iterable<Artist> getArtistas() {
+        return artistRepository.findAll();
     }
 
     //Elimino artista
     public Artist eliminarArtist(Long IdArtist) {
-        return artistaMap.remove(IdArtist);
+        artistRepository.deleteById(IdArtist);
+        return null;
     }
 
     //Creo Artista
 
     public Artist createArtist(Artistrequest request) {
         Artist artist = artistMapper.apply(request);
-        if (artistaMap.get(request.getIdArtist()) == null) {
-            artistaMap.put(request.getIdArtist(), artistMapper.apply(request));
-        } else {
-
-            Logger log = null;
-            log.error("Artista ya existente");
+        if (request.getIdArtist() != null && artistRepository.findById(request.getIdArtist()) != null){
+            log.error("El artista ya exite");
             throw new ArtistExistsException("Artista existente");
+        } else {
+               artistRepository.save(artistMapper.apply(request));
         }
+
 
         return artist;
     }
 
     @Override
     public Artist editArtist(Artistrequest request, Long idArtist) {
-          Artist artist = null;
-          if (artistaMap.get(idArtist) !=null){
-              artist= artistMapper.apply(request);
-              artistaMap.remove(request.getIdArtist());
-              artistaMap.put(request.getIdArtist(),artist);
-          } else {
-              Logger log = null;
-              log.error("El artista no exite");
-              throw new ArtistNotExistException("El artista no existe");
-          }
-
+        Artist artist = null;
+        if (artistRepository.findById(idArtist)!= null) {
+            artist = artistMapper.apply(request);
+            artistRepository.save(artist);
+        } else {
+            log.error("El artista no exite");
+            throw new ArtistNotExistException("El artista no existe");
+        }
 
 
         return artist;

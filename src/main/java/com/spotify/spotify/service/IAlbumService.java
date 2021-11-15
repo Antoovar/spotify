@@ -10,7 +10,7 @@ public interface IAlbumService {
 
         Album getAlbum(Long idAlbum);
 
-        List<Album> getAlbums();
+        Iterable<Album> getAlbums();
 
         Album createAlbum(Albumrequest request);
 

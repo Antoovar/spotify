@@ -41,8 +41,8 @@ public class ArtistController {
    //me devuelve lista de artistas
 
     @GetMapping(path = "/artists/")
-    public List<Artist> retriveArtists(){
-        return artistService.getArtists();
+    public Iterable<Artist> retriveArtists(){
+        return artistService.getArtistas();
     }
 
     @PostMapping(path = "/artist")

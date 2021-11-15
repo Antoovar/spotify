@@ -10,6 +10,8 @@ import com.spotify.spotify.domain.mapper.AlbumMapper;
 import com.spotify.spotify.exceptions.AlbumExistsException;
 import com.spotify.spotify.exceptions.AlbumNotExistException;
 
+import com.spotify.spotify.repository.AlbumRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -20,6 +22,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+
+
+@Slf4j
 @Service
 public class AlbumService implements IAlbumService {
 
@@ -32,35 +37,37 @@ public class AlbumService implements IAlbumService {
 
     @PostConstruct
     public void init(){
-        albumap= new HashMap<>();
+
         Albums.stream().forEach(album -> {
-            albumap.put(album.getIdAlbum(),album);
+            albumRepository.save(album);
         });
     }
+    @Autowired
+    private AlbumRepository albumRepository;
+
 
     private Map<Long, Album> albumap;
 
     public Album getAlbum(Long idAlbum){
-        return albumap.get(idAlbum);
+        return albumRepository.findById(idAlbum).get();
     }
 
     public Album deleteAlbum(Long idAlbum){
-        return albumap.remove(idAlbum);
+        albumRepository.deleteById(idAlbum);
+        return null;
     }
 
-    public List<Album> getAlbums(){
-        return new ArrayList<>(albumap.values());
+    public Iterable<Album> getAlbums(){
+        return albumRepository.findAll();
     }
 
 
     public Album createAlbum(Albumrequest request) {
         Album album = albumMapper.apply(request);
-        if (albumap.get(request.getIdAlbum()) == null) {
-            albumap.put(request.getIdAlbum(), albumMapper.apply(request));
-        } else {
+        if (request.getIdAlbum()!= null && albumRepository.findById(request.getIdAlbum()) !=null) {
 
-            Logger log = null;
-            log.error("Album ya existente");
+        } else {
+             log.error("El album ya existe");
             throw new AlbumExistsException("Album existente");
         }
 
@@ -72,13 +79,11 @@ public class AlbumService implements IAlbumService {
     public Album editAlbum(Albumrequest request, Long idAlbum) {
 
         Album album;
-        if (albumap.get(idAlbum) !=null){
-            album= albumMapper.apply(request);
-            albumap.remove(request.getIdAlbum());
-            albumap.put(request.getIdAlbum(),album);
+        if (albumRepository.findById(idAlbum)!= null) {
+            album = albumMapper.apply(request);
+            albumRepository.save(album);
         } else {
-            Logger log = null;
-            log.error("El ALbum no exite");
+            log.error("El album ya existe");
             throw new AlbumNotExistException("El Album no existe");
         }
 

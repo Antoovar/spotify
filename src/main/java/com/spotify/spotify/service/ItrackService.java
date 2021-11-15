@@ -13,7 +13,7 @@ public interface ItrackService {
 
     Track getTrack(Long id);
 
-    List<Track> getTracks();
+    Iterable<Track> getTracks();
 
     Track createTrack(Trackrequest request);
 

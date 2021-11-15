@@ -30,7 +30,7 @@ public class TrackController {
     }
 
     @GetMapping(path = "/tracks/")
-    public List<Track> retriveTracks(){
+    public Iterable<Track> retriveTracks(){
         return trackService.getTracks();
     }
 

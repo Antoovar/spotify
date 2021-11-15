@@ -6,6 +6,10 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import java.util.Map;
 
 @Data
@@ -13,8 +17,11 @@ import java.util.Map;
 @NoArgsConstructor
 @AllArgsConstructor
 
+@Entity
 public class Artist {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long idArtist;
     private String name;
     private String genre;

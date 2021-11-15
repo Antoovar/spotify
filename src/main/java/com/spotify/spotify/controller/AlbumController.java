@@ -27,7 +27,7 @@ public class AlbumController {
     }
 
     @GetMapping(path = "/albums/")
-    public List<Album> retriveArtists(){
+    public Iterable<Album> retriveArtists(){
         return albumService.getAlbums();
     }
 

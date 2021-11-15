@@ -13,6 +13,9 @@ import com.spotify.spotify.domain.Track;
 import com.spotify.spotify.domain.mapper.TrackMapper;
 
 
+import com.spotify.spotify.exceptions.ArtistNotExistException;
+import com.spotify.spotify.repository.TrackRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -23,6 +26,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+
+@Slf4j
 @Service
 public class TrackService implements ItrackService {
 
@@ -35,11 +40,15 @@ public class TrackService implements ItrackService {
     private List<Track> Tracks;
 
 
+
+    @Autowired
+    private TrackRepository trackRepository;
+
+
     @PostConstruct
     public void init() {
-        trackmap = new HashMap<>();
         Tracks.stream().forEach(track -> {
-            trackmap.put(track.getId(), track);
+            trackRepository.save(track);
         });
     }
 
@@ -47,45 +56,41 @@ public class TrackService implements ItrackService {
 
 
     public Track getTrack(Long id) {
-        return trackmap.get(id);
+        return trackRepository.findById(id).get();
     }
 
 
-    public List<Track> getTracks() {
-        return new ArrayList<>(trackmap.values());
+    public Iterable<Track> getTracks() {
+        return trackRepository.findAll();
     }
 
 
     public Track deleteTrack(Long id) {
-        return trackmap.remove(id);
+        trackRepository.deleteById(id);
+        return null;
     }
 
 
     public Track createTrack(Trackrequest request) {
         Track track = trackMapper.apply(request);
-        if (trackmap.get(request.getId()) == null) {
-            trackmap.put(request.getId(), trackMapper.apply(request));
-        } else {
-
-            Logger log = null;
-            log.error("Track ya existente");
+        if (request.getId() != null && trackRepository.findById(request.getIdArtist()) != null) {
+            log.error("El Track NO existe");
+        }else {
+            trackRepository.save(trackMapper.apply(request));
 
         }
-
         return track;
     }
+
 
     @Override
     public Track editTrack(Trackrequest request, Long id) {
         Track track = null;
-        if (trackmap.get(id) != null) {
+        if (trackRepository.findById(id)!= null) {
             track = trackMapper.apply(request);
-            trackmap.remove(request.getId());
-            trackmap.put(request.getId(), track);
+            trackRepository.save(track);
         } else {
-            Logger log = null;
-            log.error("El artista no exite");
-
+            log.error("El track no exite");
         }
 
 
@@ -100,6 +105,5 @@ public class TrackService implements ItrackService {
 
         return track;
     }
-
 
 }
